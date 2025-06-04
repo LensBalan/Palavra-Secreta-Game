@@ -13,9 +13,9 @@ import { useCallback, useEffect, useState } from 'react';
 import {wordsList} from './data/Words';
 
 const stages = [
-  {id: 1, name: 'start'},
+  {id: 1, name: 'inicio'},
   {id: 2, name: 'game'},
-  {id: 3, name: 'end'},
+  {id: 3, name: 'fim'},
 ];
 
  const qntTentativas = 3;
@@ -23,7 +23,7 @@ const stages = [
 function App() {
 
   const [gameStage, setGameStage] = useState(stages[0].name);
-  const [words] = useState(wordsList);
+  const [palavras] = useState(wordsList);
 
   const [palavraEscolhida, setPalavraEscolhida] = useState("");
   const [categoriaPalavra, setCategoriaPalavra] = useState([]);
@@ -36,7 +36,6 @@ function App() {
   //Iniciando o jogo
   const iniciarJogo = useCallback(() => {
 
-    //limpar estados
     limparTodosEstados();
 
     //pegar palavra
@@ -89,7 +88,7 @@ function App() {
   //usuario perdeu
   useEffect(() => {
     if(tentativas <= 0){
-      //resetar todos os estados
+  
       limparTodosEstados();
 
       setGameStage(stages[2].name);
@@ -102,7 +101,7 @@ function App() {
     const letrasUnicas = [... new Set(letras)]; //já deixa só letras unicas no array
 
     if(letrasAdivinhadas.length === letrasUnicas.length){
-      //add pontuacao
+    
       setPontuacao((pontuacaoAtual) => pontuacaoAtual += 100);
 
       //restartar o game
@@ -122,20 +121,20 @@ function App() {
 
   const pegaPalavra = useCallback(() => {
     //categoria
-    const categorias = Object.keys(words);
+    const categorias = Object.keys(palavras);
     const categoria = categorias[Math.floor(Math.random() * Object.keys(categorias).length)];
     //console.log(categoria);
 
     //palavra
-    const palavra = words[categoria][Math.floor(Math.random() * words[categoria].length)];
+    const palavra = palavras[categoria][Math.floor(Math.random() * palavras[categoria].length)];
     //console.log(palavra);
 
     return {palavra, categoria}
-  }, [words]);
+  }, [palavras]);
 
   return (
     <div className='App'>
-      {gameStage === 'start' && <TelaInicial iniciarJogo={iniciarJogo} />}
+      {gameStage === 'inicio' && <TelaInicial iniciarJogo={iniciarJogo} />}
       {gameStage === 'game' && <TelaGame
                                   verificaLetra={verificaLetra}
                                   palavraEscolhida={palavraEscolhida}
@@ -146,7 +145,7 @@ function App() {
                                   tentativas={tentativas}
                                   pontuacao={pontuacao}
                                 />}
-      {gameStage === 'end' && <TelaFinal reiniciarJogo={reiniciarJogo} pontuacao={pontuacao} />}
+      {gameStage === 'fim' && <TelaFinal reiniciarJogo={reiniciarJogo} pontuacao={pontuacao} />}
     </div>
   )
 }
