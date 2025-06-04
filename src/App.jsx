@@ -5,6 +5,7 @@ import './App.css'
 import TelaInicial from './components/TelaInicial'
 import TelaGame from './components/TelaGame';
 import TelaFinal from './components/TelaFinal';
+
 //Hooks
 import { useCallback, useEffect, useState } from 'react';
 
@@ -20,14 +21,57 @@ const stages = [
 function App() {
 
   const [gameStage, setGameStage] = useState(stages[0].name);
-
   const [words] = useState(wordsList);
+  const [palavraEscolhida, setPalavraEscolhida] = useState("");
+  const [categoriaPalavra, setCategoriaPalavra] = useState([]);
+  const [letras, setLetras] = useState([]);
+
+  //Iniciando o jogo
+  const iniciarJogo = () => {
+    //pegar palavra
+    const{palavra, categoria} = pegaPalavra();
+
+    let letrasPalavra = palavra.split('');
+    letrasPalavra = letrasPalavra.map((l) => l.toLowerCase());
+    console.log(letrasPalavra);
+
+    //setar estados
+    setPalavraEscolhida(palavra);
+    setCategoriaPalavra(categoria);
+    setLetras(letrasPalavra);
+  
+
+    setGameStage(stages[1].name);
+  };
+  
+  //Processar o input de letras 
+  const verificaLetra = () => {
+    setGameStage(stages[2].name);
+  };
+
+  //Reiniciar o jogo
+  const reiniciarJogo = () => {
+    setGameStage(stages[0].name);
+  };
+
+  const pegaPalavra = () => {
+    //categoria
+    const categorias = Object.keys(words);
+    const categoria = categorias[Math.floor(Math.random() * Object.keys(categorias).length)];
+    console.log(categoria);
+
+    //palavra
+    const palavra = words[categoria][Math.floor(Math.random() * words[categoria].length)];
+    console.log(palavra);
+
+    return {palavra, categoria}
+  };
 
   return (
     <div className='App'>
-      {gameStage === 'start' && <TelaInicial />}
-      {gameStage === 'game' && <TelaGame />}
-      {gameStage === 'end' && <TelaFinal />}
+      {gameStage === 'start' && <TelaInicial iniciarJogo={iniciarJogo} />}
+      {gameStage === 'game' && <TelaGame verificaLetra={verificaLetra} />}
+      {gameStage === 'end' && <TelaFinal reiniciarJogo={reiniciarJogo} />}
     </div>
   )
 }

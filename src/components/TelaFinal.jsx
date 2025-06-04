@@ -1,9 +1,10 @@
 import '../css/TelaFinal.css';
 
-function TelaFinal () {
+function TelaFinal ({reiniciarJogo}) {
     return (
         <div>
-
+            <h2>Game over</h2>
+            <button onClick={reiniciarJogo}>Reiniciar Jogo</button>
         </div>
     );
 }
