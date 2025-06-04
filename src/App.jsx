@@ -22,9 +22,15 @@ function App() {
 
   const [gameStage, setGameStage] = useState(stages[0].name);
   const [words] = useState(wordsList);
+
   const [palavraEscolhida, setPalavraEscolhida] = useState("");
   const [categoriaPalavra, setCategoriaPalavra] = useState([]);
   const [letras, setLetras] = useState([]);
+  const [letrasAdivinhadas, setLetrasAdivinhadas] = useState([]);
+  const [letrasErradas, setLetrasErradas] = useState([]);
+  const [tentativas, setTentativas] = useState(3);
+  const [pontuacao, setPontuacao] = useState(0);
+
 
   //Iniciando o jogo
   const iniciarJogo = () => {
@@ -45,9 +51,31 @@ function App() {
   };
   
   //Processar o input de letras 
-  const verificaLetra = () => {
-    setGameStage(stages[2].name);
+  const verificaLetra = (letra) => {
+    
+    const letraNormalizada = letra.toLowerCase();
+
+    //checar se a letra já foi utilizada
+    if(letrasAdivinhadas.includes(letraNormalizada) || letrasErradas.includes(letraNormalizada)){
+      return;
+    }
+  
+
+    //colocar letra adivinhada ou perder 1 tentativa
+    if(letras.includes(letraNormalizada)){
+      setLetrasAdivinhadas((estadoAtualAdivinhadas) => [
+        ...estadoAtualAdivinhadas, letraNormalizada //... todos os elementos atuais (spred)
+      ])
+    } else {
+      setLetrasErradas((estadoAtualErradas) => [
+        ...estadoAtualErradas, letraNormalizada
+      ])
+    }
+
   };
+
+   console.log(letrasAdivinhadas);
+   console.log(letrasErradas);
 
   //Reiniciar o jogo
   const reiniciarJogo = () => {
@@ -70,7 +98,16 @@ function App() {
   return (
     <div className='App'>
       {gameStage === 'start' && <TelaInicial iniciarJogo={iniciarJogo} />}
-      {gameStage === 'game' && <TelaGame verificaLetra={verificaLetra} />}
+      {gameStage === 'game' && <TelaGame
+                                  verificaLetra={verificaLetra}
+                                  palavraEscolhida={palavraEscolhida}
+                                  categoriaPalavra={categoriaPalavra} 
+                                  letras={letras} 
+                                  letrasAdivinhadas={letrasAdivinhadas}
+                                  letrasErradas={letrasErradas}
+                                  tentativas={tentativas}
+                                  pontuacao={pontuacao}
+                                />}
       {gameStage === 'end' && <TelaFinal reiniciarJogo={reiniciarJogo} />}
     </div>
   )
