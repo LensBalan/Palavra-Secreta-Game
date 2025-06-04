@@ -30,7 +30,7 @@ function TelaGame ({
         </p>
         <h1>Adivinhe a Palavra:</h1>
         <h3 className='tip'>Dica sobre a palavra: <span>{categoriaPalavra}</span></h3>
-        <p>Você ainda tem {tentativas} tentativas</p>
+        <p>Você ainda tem {tentativas} tentativa(s)</p>
         <div className='word-container'>
             {letras.map((letra, indice) => (
                 letrasAdivinhadas.includes(letra) ? (
