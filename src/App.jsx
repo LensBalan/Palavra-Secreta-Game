@@ -1,5 +1,5 @@
 //CSS
-import './App.css'
+import './css/App.css';
 
 //Componentes
 import TelaInicial from './components/TelaInicial'
